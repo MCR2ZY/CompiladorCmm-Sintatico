@@ -37,3 +37,8 @@ void prog(){
 void tipo(){
     analex();
 }
+
+void decl(){
+     analex(fp);
+
+}
