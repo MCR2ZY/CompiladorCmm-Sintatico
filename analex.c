@@ -9,9 +9,8 @@
 */
 #include "analex.h"
 
-int contlin = 1;
-int ultimoLiteral = 0;
-char TabelaLiterais[QntLiteral][TamLexema];
+int contlin = 1;                // Contador de linhas
+Token token;                    // Recebe o token do analisador lexico
 char TabPalReservadas[QntPalReservadas][TamPalReservadas] = {
         "booleano",        "caracter",        "enquanto",
         "inteiro",         "para",            "real",
@@ -19,10 +18,7 @@ char TabPalReservadas[QntPalReservadas][TamPalReservadas] = {
         "semretorno",     "senao"
     };
 
-Token exceptionToken(); // Função implementada no fim do analex.c
-
-Token analex(FILE *fp){
-    Token token;                       // Recebe o token do analisador lexico
+void analex(FILE *fp){
     int i;                             // Variavel auxiliar para laços de repeticao
     int estado = 0;                    // Controla o estado no automato
     int p = 0;                         // Controla a posição tanto da vetor para literal quanto do vetor para o numero
@@ -40,7 +36,7 @@ Token analex(FILE *fp){
                 if(c == ' ' || c == '\t'){  // Filtra espacos e tabs exceto \n
                     estado = 0;
                 }
-                else if(c == '\n')            //Filtra os enter's + incrementa o contador de linhas
+                else if(c == '\n')            //Filtra os enter's e incrementa o contador de linhas
                 {
                     estado = 0;
                     contlin++;
@@ -111,7 +107,7 @@ Token analex(FILE *fp){
                 }
                 else{
                     token = exceptionToken();
-                    return token;
+                    return;
                 }
                 break;
             case 1:
@@ -132,24 +128,12 @@ Token analex(FILE *fp){
                         token.tipo = PR;
                         strcpy(token.lexema, literal);
                         token.valor.codPR = i;
-                        return token;
+                        return;
                     }
                 }
-                for(i=0; i<QntLiteral; i++){
-                    if(!strcmp(literal, TabelaLiterais[i])){
-                        token.tipo = ID;
-                        strcpy(token.lexema, literal);
-                        token.valor.posLiteral = i;
-                        return token;
-                    }
-                }
-                // Novo ID
                 token.tipo = ID;
-                token.valor.posLiteral = ultimoLiteral;
                 strcpy(token.lexema, literal);
-                strcpy(TabelaLiterais[ultimoLiteral], literal);
-                ultimoLiteral++;
-                return token;
+                return;
                 break;
             case 3:
                 numero[p] = c;
@@ -168,7 +152,7 @@ Token analex(FILE *fp){
                 numero[p] = EOS;
                 token.tipo = CT_I;
                 token.valor.valorInt = atoi(numero);    // converter string para inteiro
-                return token;
+                return;
                 break;
             case 5:
                 numero[p] = c;
@@ -178,7 +162,7 @@ Token analex(FILE *fp){
                     estado = 6;
                 }else{
                     token = exceptionToken();
-                    return token;
+                    return;
                 }
                 break;
             case 6:
@@ -196,7 +180,7 @@ Token analex(FILE *fp){
                 numero[p] = EOS;
                 token.tipo = CT_R;
                 token.valor.valorReal = atof(numero);   // Converter string para num real
-                return token;
+                return;
                 break;
             case 8:
                 literal[p] = c;
@@ -216,7 +200,7 @@ Token analex(FILE *fp){
                     estado = 10;
                 }else{
                     token = exceptionToken();
-                    return token;
+                    return;
                 }
                 break;
             case 10:
@@ -225,7 +209,7 @@ Token analex(FILE *fp){
                 literal[p] = EOS;
                 token.tipo = CT_C;
                 strcpy(token.lexema, literal);
-                return token;
+                return;
                 break;
             case 11:
                 literal[p] = c;
@@ -237,7 +221,7 @@ Token analex(FILE *fp){
                     estado = 14;
                 }else {
                     token = exceptionToken();
-                    return token;
+                    return;
                 }
                 break;
             case 12:
@@ -248,7 +232,7 @@ Token analex(FILE *fp){
                     estado = 13;
                 }else{
                     token = exceptionToken();
-                    return token;
+                    return;
                 }
                 break;
             case 13:
@@ -257,7 +241,7 @@ Token analex(FILE *fp){
                 literal[p] = EOS;
                 token.tipo = CT_C;
                 strcpy(token.lexema, literal);
-                return token;
+                return;
                 break;
             case 14:
                 literal[p] = c;
@@ -267,7 +251,7 @@ Token analex(FILE *fp){
                     estado = 15;
                 }else{
                     token = exceptionToken();
-                    return token;
+                    return;
                 }
                 break;
             case 15:
@@ -276,7 +260,7 @@ Token analex(FILE *fp){
                 literal[p] = EOS;
                 token.tipo = CT_C;
                 strcpy(token.lexema, literal);
-                return token;
+                return;
                 break;
             case 16:
                 literal[p] = c;
@@ -288,7 +272,7 @@ Token analex(FILE *fp){
                     estado = 17;
                 }else{
                     token = exceptionToken();
-                    return token;
+                    return;
                 }
                 break;
             case 17:
@@ -297,49 +281,49 @@ Token analex(FILE *fp){
                 literal[p] = EOS;
                 token.tipo = CT_L;
                 strcpy(token.lexema, literal);
-                return token;
+                return;
                 break;
             case 18:
                 token.tipo = SN;
                 token.valor.codSN = SN_PTO_VIRGULA;
                 strcpy(token.lexema, ";");
-                return token;
+                return;
                 break;
             case 19:
                 token.tipo = SN;
                 token.valor.codSN = SN_ABRI_PARENTESE;
                 strcpy(token.lexema, "(");
-                return token;
+                return;
                 break;
             case 20:
                 token.tipo = SN;
                 token.valor.codSN = SN_FECHA_PARENTESE;
                 strcpy(token.lexema, ")");
-                return token;
+                return;
                 break;
             case 21:
                 token.tipo = SN;
                 token.valor.codSN = SN_SUBTRACAO;
                 strcpy(token.lexema,"-");
-                return token;
+                return;
                 break;
             case 22:
                 token.tipo = SN;
                 token.valor.codSN = SN_SOMA;
                 strcpy(token.lexema, "+");
-                return token;
+                return;
                 break;
             case 23:
                 token.tipo = SN;
                 token.valor.codSN = SN_MULTIPLICACAO;
                 strcpy(token.lexema, "*");
-                return token;
+                return;
                 break;
             case 24:
                 token.tipo = SN;
                 token.valor.codSN = SN_VIRGULA;
                 strcpy(token.lexema, ",");
-                return token;
+                return;
                 break;
             case 25:
                 c = fgetc(fp);
@@ -347,14 +331,14 @@ Token analex(FILE *fp){
                     estado = 26;
                 }else{
                     token = exceptionToken();
-                    return token;
+                    return;
                 }
                 break;
             case 26:
                 token.tipo = SN;
                 token.valor.codSN = SN_AND;
                 strcpy(token.lexema, "&&");
-                return token;
+                return;
                 break;
             case 27:
                 c = fgetc(fp);
@@ -362,14 +346,14 @@ Token analex(FILE *fp){
                     estado = 28;
                 }else{
                     token = exceptionToken();
-                    return token;
+                    return;
                 }
                 break;
             case 28:
                 token.tipo = SN;
                 token.valor.codSN = SN_OR;
                 strcpy(token.lexema, "||");
-                return token;
+                return;
                 break;
             case 29:
                 c = fgetc(fp);
@@ -384,13 +368,13 @@ Token analex(FILE *fp){
                 token.tipo = SN;
                 token.valor.codSN = SN_MENOR;
                 strcpy (token.lexema, "<");
-                return token;
+                return;
                 break;
             case 31:
                 token.tipo = SN;
                 token.valor.codSN = SN_MENOR_IGUAL;
                 strcpy (token.lexema, "<=");
-                return token;
+                return;
                 break;
             case 32:
                 c = fgetc(fp);
@@ -405,13 +389,13 @@ Token analex(FILE *fp){
                 token.tipo = SN;
                 token.valor.codSN = SN_MAIOR;
                 strcpy (token.lexema, ">");
-                return token;
+                return;
                 break;
             case 34:
                 token.tipo = SN;
                 token.valor.codSN = SN_MAIOR_IGUAL;
                 strcpy (token.lexema, ">=");
-                return token;
+                return;
                 break;
             case 35:
                 c = fgetc(fp);
@@ -426,13 +410,13 @@ Token analex(FILE *fp){
                 token.tipo = SN;
                 token.valor.codSN = SN_ATRIBUICAO;
                 strcpy (token.lexema, "=");
-                return token;
+                return;
                 break;
             case 37:
                 token.tipo = SN;
                 token.valor.codSN = SN_COMPARACAO;
                 strcpy(token.lexema, "==");
-                return token;
+                return;
                 break;
             case 38:
                 c = fgetc(fp);
@@ -447,13 +431,13 @@ Token analex(FILE *fp){
                 token.tipo = SN;
                 token.valor.codSN = SN_NEGACAO;
                 strcpy(token.lexema, "!");
-                return token;
+                return;
                 break;
             case 40:
                 token.tipo = SN;
                 token.valor.codSN = SN_DIFERENTE;
                 strcpy(token.lexema, "!=");
-                return token;
+                return;
                 break;
             case 41:
                 c = fgetc(fp);
@@ -468,7 +452,7 @@ Token analex(FILE *fp){
                 token.tipo = SN;
                 token.valor.codSN = SN_DIVISAO;
                 strcpy (token.lexema, "/");
-                return token;
+                return;
                 break;
             case 43:
                 c = fgetc(fp);
@@ -497,18 +481,18 @@ Token analex(FILE *fp){
                 token.tipo = SN;
                 token.valor.codSN = SN_ABRI_CHAVE;
                 strcpy(token.lexema, "{");
-                return token;
+                return;
                 break;
             case 46:
                 token.tipo = SN;
                 token.valor.codSN = SN_FECHA_CHAVE;
                 strcpy(token.lexema, "}");
-                return token;
+                return;
                 break;
             case 47:
                 token.tipo = END;
                 token.valor.valorInt=0;
-                return token;
+                return;
             default:
                 printf("\n\tErro Léxico!!!\n");
                 exit (1);
