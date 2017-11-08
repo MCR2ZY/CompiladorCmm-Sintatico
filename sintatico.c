@@ -23,22 +23,40 @@ void prog(){
             analex(fp);
             if(token.categoria == ID){
                 analex(fp);
+                if(token.categoria == SN && token.codSN == SN_ABRI_PARENTESE)
+                    func();
+                else if(token.categoria == SN && (token.codSN == SN_PTO_VIRGULA || token.codSN == SN_VIRGULA))
+                    decl();
+                    analex(fp);
+                    if(token.categoria == SN && token.codSN == SN_PTO_VIRGULA){
+                        return;
+                    }
+                    else{
+                        print("Token Inesperado!");
+                        exit(1);
+                    }
+                else
+                    printf("Token Inesperado!");
+                    exit(1);
             }
-            else{
-                printf("ID Inesperado");
-            }
+            else
+                printf("Token Inesperado!");
+                exit(1);
         }
-        if(token.categoria == SN && token.codSN == SN_ABRI_PARENTESE){
-            func();
-        }
+        else
+            printf("Token Inesperado!");
+            exit(1);
     }
 }
 
-void tipo(){
-    analex();
-}
-
 void decl(){
-     analex(fp);
-
+    if(token.codSN == SN_PTO_VIRGULA){
+        return;
+    }
+    else{
+        while(token.codSN == SN_VIRGULA){       //Enquanto ocorrer virgula chama func decl_var, para checar se vem ID
+            decl_var();
+            analex(fp);
+        }
+    }
 }
