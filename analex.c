@@ -4,7 +4,7 @@
 * @author Maurício Menezes
 * @version  x.x
 * @date 10.10.17
-* @brief
+* @brief Analisador Léxico
 ******************************************************************************
 */
 #include "analex.h"

@@ -4,7 +4,7 @@
 * @author Maurício Menezes
 * @version  x.x
 * @date 10.10.17
-* @brief
+* @brief Cabeçalho do Analisador Léxico
 ******************************************************************************
 */
 #ifndef ANALEX_H_INCLUDED
@@ -56,12 +56,14 @@ typedef struct token{
 	} valor;
 }Token;
 
+void analex(FILE *);
+Token exceptionToken();
+
 extern char TabPalReservadas[QntPalReservadas][TamPalReservadas];
 extern char TabSinais[QntSinal][TamSinal];
 extern int contlin;
 extern Token token;
-
-void analex(FILE *);
-Token exceptionToken();
+extern Token tokenNext;
+extern File *fp;
 
 #endif // ANALEX_H_INCLUDED
