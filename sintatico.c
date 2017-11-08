@@ -33,3 +33,8 @@ void prog(){
         }
     }
 }
+
+void decl(){
+     analex(fp);
+
+}
