@@ -10,13 +10,13 @@
 #include "analex.h"
 
 Token token;
+FILE *fp;
 
 void imprimeToken(Token ); //Função temporaria de teste para imprimir tokens
 
 int main(int argc, char const *argv[])
 {
     char nomeFile[tamNomeFile];
-    FILE *fp;
 
     printf("Insira o nome do arquivo(nomeArquivo.extensao):\n");
     scanf(" %s", nomeFile);
