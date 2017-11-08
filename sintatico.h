@@ -36,7 +36,9 @@ typedef struct simbolo{
 
 void prog();
 void decl();
+void decl_var();
 void tipo();
+voi tipos_param();
 void func();
 void cmd();
 void atrib();
