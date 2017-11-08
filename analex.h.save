@@ -64,6 +64,6 @@ extern char TabSinais[QntSinal][TamSinal];
 extern int contlin;
 extern Token token;
 extern Token tokenNext;
-extern FILE *fp;
+ern File *fp;
 
 #endif // ANALEX_H_INCLUDED

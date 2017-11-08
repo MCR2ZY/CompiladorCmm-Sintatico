@@ -11,3 +11,15 @@
 1510100556 source:c:\users\home\desktop\compiladores\sintaticotemp\main.c
 	"analex.h"
 
+1510154386 source:c:\users\m\desktop\gitw\sintaticotemp\analex.c
+	"analex.h"
+
+1510154588 c:\users\m\desktop\gitw\sintaticotemp\analex.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+
+1510154386 source:c:\users\m\desktop\gitw\sintaticotemp\main.c
+	"analex.h"
+
