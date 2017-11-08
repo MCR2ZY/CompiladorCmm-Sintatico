@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1510100565 source:c:\users\home\desktop\compiladores\sintaticotemp\analex.c
+	"analex.h"
+
+1510100454 c:\users\home\desktop\compiladores\sintaticotemp\analex.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+
+1510100556 source:c:\users\home\desktop\compiladores\sintaticotemp\main.c
+	"analex.h"
+
