@@ -9,11 +9,12 @@
 */
 #include "analex.h"
 
+Token token;
+
 void imprimeToken(Token ); //Função temporaria de teste para imprimir tokens
 
 int main(int argc, char const *argv[])
 {
-    Token tkn;
     char nomeFile[tamNomeFile];
     FILE *fp;
 
@@ -28,8 +29,8 @@ int main(int argc, char const *argv[])
     }
 
     while(!feof (fp)){
-        tkn = analex(fp);
-        imprimeToken(tkn);
+        analex(fp);
+        imprimeToken(token);
     }
 
     fclose(fp);
@@ -53,7 +54,6 @@ void imprimeToken(Token tkn){
             break;
         case ID:
             printf("\n\t< ID, \" %s \" >", tkn.lexema);
-            printf(" [Codigo literal: %d]", tkn.valor.posLiteral);
             break;
         case PR:
             printf("\n\t< PR, \" %s \" >", TabPalReservadas[tkn.valor.codPR]);
