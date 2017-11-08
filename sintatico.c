@@ -33,3 +33,7 @@ void prog(){
         }
     }
 }
+
+void tipo(){
+    analex();
+}
