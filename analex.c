@@ -15,7 +15,7 @@ char TabPalReservadas[QntPalReservadas][TamPalReservadas] = {
         "booleano",        "caracter",        "enquanto",
         "inteiro",         "para",            "real",
         "retorne",         "se",              "semparam",
-        "semretorno",     "senao"
+        "semretorno",     "senao",            "prototipo"
     };
 
 void analex(FILE *fp){
