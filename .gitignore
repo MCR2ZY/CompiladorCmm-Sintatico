@@ -46,11 +46,11 @@
 *.mod*
 *.cmd
 *.save
-*.layout
-*.depend
 .tmp_versions/
 modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
 cod.txt
+CompiladorCmm.depend
+CompiladorCmm.layout
