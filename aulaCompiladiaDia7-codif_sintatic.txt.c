@@ -70,3 +70,19 @@ real  integra(semparam){
         Na checagem não deve desempilhar
         No final da função desempilha até o nome da função, Deixando os parametros
         */
+
+
+
+        ---------------------------------------------------------------------------------------------------
+        Adicionar palavra prototipo ao analisador lexico
+        Palavra prototipo ficara antes da declaracao da função
+
+        Criar tabela de Simbolos
+        desempilha na tab os locais e variavel
+
+        cria identificador zombie(marca na tabela os parametros como excluidos)
+
+        usar variavel para controlar Escopo
+
+        #define TRUE 1
+        #define FALSE 0
