@@ -15,48 +15,191 @@ Simbolo TabelaSimbolos[QntSimbolos];
 FILE *fp;
 Token token;
 Token tokenNext;
+int contlin;
 
 void prog(){
     while(!feof (fp)){
         analex(fp);
-        if(token.categoria == PR && (token.codPR == BOOLEANO || token.codPR == CARACTER || token.codPR == INTEIRO || token.codPR == REAL || token.codPR == SEMRETORNO)){
+        // Trata declaração de ID's e Funções
+        if(tipo();){
             analex(fp);
-            if(token.categoria == ID){
+            if(token.tipo == ID){
                 analex(fp);
-                if(token.categoria == SN && token.codSN == SN_ABRI_PARENTESE)
+                if(token.tipo == SN && token.codSN == SN_ABRI_PARENTESE){
                     func();
-                else if(token.categoria == SN && (token.codSN == SN_PTO_VIRGULA || token.codSN == SN_VIRGULA))
-                    decl();
-                    analex(fp);
-                    if(token.categoria == SN && token.codSN == SN_PTO_VIRGULA){
-                        return;
+                }
+                else if(token.tipo == SN && token.codSN == SN_VIRGULA){
+                    while(token.tipo == SN && token.codSN == SN_VIRGULA){
+                        analex(fp);
+                        if(token.tipo == SN){
+                            analex(fp);
+                        }
+                        else{
+                            printf("ERRO, Token inesperado na linha %d", contlin);
+                            exit(1);
+                        }
                     }
+                    analex(fp);
+                    if(token.tipo == SN && token.codSN == SN_PTO_VIRGULA)
                     else{
-                        print("Token Inesperado!");
+                        printf("ERRO, Token inesperado na linha %d", contlin);
                         exit(1);
                     }
-                else
-                    printf("Token Inesperado!");
+                }
+                else if(token.tipo == SN && token.codSN == SN_PTO_VIRGULA)
+                else{
+                    printf("ERRO, Token inesperado na linha %d", contlin);
                     exit(1);
+                }
             }
-            else
-                printf("Token Inesperado!");
-                exit(1);
         }
-        else
-            printf("Token Inesperado!");
+        else if(token.tipo == PR && token.codPR == PR_PROTOTIPO){
+            analex(fp);
+            if(tipo();){
+                analex(fp);
+                if(token.tipo == ID){
+                    analex(fp);
+                    if(token.tipo == SN && token.codSN == SN_ABRI_PARENTESE){
+                        tipos_p_opc();
+                        analex(fp);
+                        if(token.tipo == SN && token.codSN == SN_FECHA_PARENTESE){
+                            analex(fp);
+                            if(token.tipo == SN && token.codSN == SN_PTO_VIRGULA)
+                            else if(token.tipo == SN && token.codSN == SN_VIRGULA){
+                                while(token.tipo == SN && token.codSN == SN_VIRGULA){
+                                    analex(fp);
+                                    if(token.tipo == ID){
+                                        analex(fp);
+                                        if(token.tipo == SN && token.codSN == SN_ABRI_PARENTESE){
+                                            tipos_p_opc();
+                                            analex(fp);
+                                            if(token.tipo == SN && token.codSN == SN_FECHA_PARENTESE)
+                                            else{
+                                                printf("ERRO, Token inesperado na linha %d", contlin);
+                                                exit(1);
+                                            }
+                                            analex(fp);
+                                            if(token.tipo == SN && token.codSN == SN_PTO_VIRGULA)
+                                            else{
+                                                printf("ERRO, Token inesperado na linha %d", contlin);
+                                                exit(1);
+                                            }
+                                        }
+                                        else{
+                                            printf("ERRO, Token inesperado na linha %d", contlin);
+                                            exit(1);
+                                        }
+                                    }
+                                    else{
+                                        printf("ERRO, Token inesperado na linha %d", contlin);
+                                        exit(1);
+                                    }
+                                }
+                            }
+                            else{
+                                printf("ERRO, Token inesperado na linha %d", contlin);
+                                exit(1);
+                            }
+                        }
+                        else{
+                            printf("ERRO, Token inesperado na linha %d", contlin);
+                            exit(1);
+                        }
+                    }
+                    else{
+                        printf("ERRO, Token inesperado na linha %d", contlin);
+                        exit(1);
+                    }
+                }
+                else{
+                    printf("ERRO, Token inesperado na linha %d", contlin);
+                    exit(1);
+                }
+            }
+            else if(token.tipo == PR && token.codPR == SEMRETORNO){
+                analex(fp);
+                if(token.tipo == ID){
+                    analex(fp);
+                    if(token.tipo == SN && token.codSN == SN_ABRI_PARENTESE){
+                        tipos_p_opc();
+                        analex(fp);
+                        if(token.tipo == SN && token.codSN == SN_FECHA_PARENTESE){
+                            analex(fp);
+                            if(token.tipo == SN && token.codSN == SN_PTO_VIRGULA)
+                            else if(token.tipo == SN && token.codSN == SN_VIRGULA){
+                                while(token.tipo == SN && token.codSN == SN_VIRGULA){
+                                    analex(fp);
+                                    if(token.tipo == ID){
+                                        analex(fp);
+                                        if(token.tipo == SN && token.codSN == SN_ABRI_PARENTESE){
+                                            tipos_p_opc();
+                                            analex(fp);
+                                            if(token.tipo == SN && token.codSN == SN_FECHA_PARENTESE)
+                                            else{
+                                                printf("ERRO, Token inesperado na linha %d", contlin);
+                                                exit(1);
+                                            }
+                                            analex(fp);
+                                            if(token.tipo == SN && token.codSN == SN_PTO_VIRGULA)
+                                            else{
+                                                printf("ERRO, Token inesperado na linha %d", contlin);
+                                                exit(1);
+                                            }
+                                        }
+                                        else{
+                                            printf("ERRO, Token inesperado na linha %d", contlin);
+                                            exit(1);
+                                        }
+                                    }
+                                    else{
+                                        printf("ERRO, Token inesperado na linha %d", contlin);
+                                        exit(1);
+                                    }
+                                }
+                            }
+                            else{
+                                printf("ERRO, Token inesperado na linha %d", contlin);
+                                exit(1);
+                            }
+                        }
+                        else{
+                            printf("ERRO, Token inesperado na linha %d", contlin);
+                            exit(1);
+                        }
+                    }
+                    else{
+                        printf("ERRO, Token inesperado na linha %d", contlin);
+                        exit(1);
+                    }
+                }
+                else{
+                    printf("ERRO, Token inesperado na linha %d", contlin);
+                    exit(1);
+                }
+            }
+        }
+        else if(token.tipo == PR && token.codPR == SEMRETORNO){
+            analex(fp);
+            if(token.tipo == SN && token.codSN == SN_ABRI_PARENTESE){
+                func();
+            }
+            else{
+                printf("ERRO, Token inesperado na linha %d", contlin);
+                exit(1);
+            }
+        }
+        else{
+            printf("ERRO, Token inesperado na linha %d", contlin);
             exit(1);
+        }
     }
 }
 
-void decl(){
-    if(token.codSN == SN_PTO_VIRGULA){
-        return;
+bool tipo(){
+    if(token.tipo == PR && (token.codPR == CARACTER || token.codPR == INTEIRO || token.codPR == REAL || token.codPR == BOOLEANO)){
+        return 1;
     }
     else{
-        while(token.codSN == SN_VIRGULA){       //Enquanto ocorrer virgula chama func decl_var, para checar se vem ID
-            decl_var();
-            analex(fp);
-        }
+        return 0;
     }
 }
