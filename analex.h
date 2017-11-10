@@ -15,7 +15,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#define QntPalReservadas 11
+#define QntPalReservadas 12
 #define TamPalReservadas 15
 #define QntSinal 21
 #define TamSinal 3
@@ -28,7 +28,7 @@ typedef enum palReservada{
     PR_BOOLEANO,        PR_CARACTER,        PR_ENQUANTO,
     PR_INTEIRO,         PR_PARA,            PR_REAL,
     PR_RETORNE,         PR_SE,              PR_SEM_PARAM,
-    PR_SEM_RETORNO,     PR_SENAO
+    PR_SEM_RETORNO,     PR_SENAO,           PR_PROTOTIPO
 }PalReservada;
 
 typedef enum sinal{
