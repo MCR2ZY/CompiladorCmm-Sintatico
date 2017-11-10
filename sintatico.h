@@ -2,7 +2,7 @@
 ******************************************************************************
 * @file	sintatico.h
 * @author Marcelo Henrique, Mauricio Souza
-* @version  x.x 
+* @version  x.x
 * @date 08.11.17
 * @brief Cabeçalho do Analisador Sintático
 ******************************************************************************
@@ -10,12 +10,12 @@
 #ifndef SINTATICO_H_INCLUDED
 #define SINTATICO_H_INCLUDED
 
-#include "lexico.h"
+#include "analex.h"
 
 #define QntSimbolos 100
 
 typedef enum tipoSimbolo{
-    BOOLEANO, CARACTER, INTEIRO, REAL, SEMRETORNO        
+    BOOLEANO, CARACTER, INTEIRO, REAL, SEMRETORNO
 } TipoSimbolo;
 
 typedef enum categoriaSimbolo{
@@ -32,9 +32,10 @@ typedef struct simbolo{
     TipoSimbolo tipo;
     CategoriaSimbolo categoria;
     EscopoSimbolo escopo;
-    int excluido; // bool. Verdadeira se função do parametro já foi terminada 
+    int excluido; // bool. Verdadeira se função do parametro já foi terminada
 } Simbolo;
 
+void sintatico();
 void prog();
 bool tipo();
 void tipos_param();
