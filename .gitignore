@@ -1,3 +1,4 @@
+### C ###
 # Prerequisites
 *.d
 
@@ -52,5 +53,22 @@ Module.symvers
 Mkfile.old
 dkms.conf
 cod.txt
-CompiladorCmm.depend
-CompiladorCmm.layout
+
+### CodeBlocks ###
+# specific to CodeBlocks IDE
+*.layout
+*.depend
+
+# generated directories
+bin/
+obj/
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history
+
+# End of https://www.gitignore.io/api/c,codeblocks,visualstudiocode
