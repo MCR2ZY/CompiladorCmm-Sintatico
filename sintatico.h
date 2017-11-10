@@ -32,17 +32,21 @@ typedef struct simbolo{
     TipoSimbolo tipo;
     CategoriaSimbolo categoria;
     EscopoSimbolo escopo;
+    int excluido; // bool. Verdadeira se função do parametro já foi terminada 
 } Simbolo;
 
 void prog();
-void decl();
-void decl_var();
-void tipo();
-voi tipos_param();
-void func();
+bool tipo();
+void tipos_param();
+void tipos_p_opc();
 void cmd();
 void atrib();
 void expr();
+void expr_simp();
+void termo();
+void fator();
+bool op_rel();
+void func(); // Adicionada para facilitar tratamento de funções. Não consta na gramatica
 
 extern Simbolo TabelaSimbolos[QntSimbolos];
 
