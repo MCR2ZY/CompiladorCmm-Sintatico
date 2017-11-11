@@ -510,3 +510,7 @@ Token exceptionToken(){
     tknAux.valor.valorInt = 1;
     return tknAux;
 }
+void error(){ // func erro [organizacao de codigo]
+        printf("ERRO, token inesperado na linha %d", contlin);
+        exit(1);
+}

@@ -7,6 +7,13 @@
 * @brief
 ******************************************************************************
 */
+/*
+prog() (x)
+
+
+
+
+*/
 
 #include "sintatico.h"
 #include "analex.h"
@@ -266,6 +273,78 @@ bool tipo()
 
 void func() {}
 
+void tipos_param()
+{
+    analex(fp);
+    if(token.tipo == PR && token.valor.codPR == PR_SEM_PARAM)
+    {
+        analex(fp);
+    }
+    else if(tipo())
+    {
+        analex(fp);
+        if(token.tipo == ID)
+        {
+            analex(fp);
+            if(token.tipo == SN && token.valor.codSN == SN_VIRGULA)
+            {
+                while(token.tipo == SN && token.valor.codSN == SN_VIRGULA)
+                {
+                    analex(fp);
+                    if(tipo())
+                    {
+                        analex(fp);
+                        if(token.tipo == ID)
+                        {
+                            analex(fp);
+                        }
+                        else
+                        {
+                            printf("ERRO, token inesperado na linha %d", contlin);
+                            exit(1);
+                        }
+                    }
+                    else
+                    {
+                        printf("ERRO, token inesperado na linha %d", contlin);
+                        exit(1);
+                    }
+                }
+            }
+        }
+        else if(token.tipo == SN && token.valor.codSN == SN_VIRGULA)
+        {
+            while(token.tipo == SN && token.valor.codSN == SN_VIRGULA)
+            {
+                analex(fp);
+                if(tipo())
+                {
+                    analex(fp);
+                    if(token.tipo == ID)
+                    {
+                        analex(fp);
+                    }
+                    else
+                    {
+                        printf("ERRO, token inesperado na linha %d", contlin);
+                        exit(1);
+                    }
+                }
+                else
+                {
+                    printf("ERRO, token inesperado na linha %d", contlin);
+                    exit(1);
+                }
+            }
+        }
+    }
+    else
+    {
+        printf("ERRO, token inesperado na linha %d", contlin);
+        exit(1);
+    }
+}
+
 void tipos_p_opc()
 {
     analex(fp);
@@ -326,16 +405,20 @@ void tipos_p_opc()
         printf("ERRO, token inesperado na linha %d", contlin);
         exit(1);
     }
-    bool op_rel()
+}
+
+bool op_rel()
+{
+    analex(fp);
+    if((token.tipo = SN) && (token.valor.codSN == SN_COMPARACAO || token.valor.codSN == SN_DIFERENTE || token.valor.codSN == SN_MENOR_IGUAL || token.valor.codSN == SN_MENOR || token.valor.codSN == SN_MAIOR_IGUAL || token.valor.codSN == SN_MAIOR))
     {
-        analex(fp);
-        if((token.tipo = SN) && (token.valor.codSN == SN_COMPARACAO || token.valor.codSN == SN_DIFERENTE || token.valor.codSN == SN_MENOR_IGUAL || token.valor.codSN == SN_MENOR || token.valor.codSN == SN_MAIOR_IGUAL || token.valor.codSN == SN_MAIOR))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
+
+
+

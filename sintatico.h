@@ -36,18 +36,19 @@ typedef struct simbolo{
 } Simbolo;
 
 void sintatico();
-void prog();
-bool tipo();
-void tipos_param();
-void tipos_p_opc();
+void prog(); //ok
+bool tipo(); //ok
+void tipos_param();//ok
+void tipos_p_opc();//ok
 void cmd();
 void atrib();
 void expr();
 void expr_simp();
 void termo();
-void fator();
-bool op_rel();
+void fator(); //fazendo
+bool op_rel(); //ok
 void func(); // Adicionada para facilitar tratamento de funções. Não consta na gramatica
+void error(); // deixar codigo arrumado parte de erro
 
 extern Simbolo TabelaSimbolos[QntSimbolos];
 
