@@ -24,6 +24,8 @@
 #define TamNum 20
 #define EOS '\0'
 #define tamNomeFile 10
+#define true 1
+#define false 0
 
 typedef enum palReservada{
     PR_BOOLEANO,        PR_CARACTER,        PR_ENQUANTO,
