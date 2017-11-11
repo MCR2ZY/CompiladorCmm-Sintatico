@@ -65,7 +65,6 @@ void prog(){
                     analex(fp);
                     if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE){
                         tipos_p_opc();
-                        analex(fp);
                         if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE){
                             analex(fp);
                             if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA){}
@@ -120,13 +119,12 @@ void prog(){
                     exit(1);
                 }
             }
-            else if(token.tipo == PR && token.valor.codPR == SEMRETORNO){
+            else if(token.tipo == PR && token.valor.codPR == PR_SEM_RETORNO){
                 analex(fp);
                 if(token.tipo == ID){
                     analex(fp);
                     if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE){
                         tipos_p_opc();
-                        analex(fp);
                         if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE){
                             analex(fp);
                             if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA){}
@@ -182,7 +180,7 @@ void prog(){
                 }
             }
         }
-        else if(token.tipo == PR && token.valor.codPR == SEMRETORNO){
+        else if(token.tipo == PR && token.valor.codPR == PR_SEM_RETORNO){
             analex(fp);
             if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE){
                 func();
@@ -213,4 +211,46 @@ bool tipo(){
 
 void func(){}
 
-void tipos_p_opc(){}
+void tipos_p_opc(){
+    analex(fp);
+    if(token.tipo == PR && token.valor.codPR == PR_SEM_PARAM){
+        analex(fp);
+    }
+    else if(tipo()){
+        analex(fp);
+        if(token.tipo == ID){
+            analex(fp);
+            if(token.tipo == SN && token.valor.codSN == SN_VIRGULA){
+                while(token.tipo == SN && token.valor.codSN == SN_VIRGULA){
+                    analex(fp);
+                    if(tipo()){
+                        analex(fp);
+                        if(token.tipo == ID){
+                            analex(fp);
+                        }
+                    }
+                    else{
+                        printf("ERRO, token inesperado na linha %d", contlin);
+                    }
+                }
+            }
+        }
+        else if(token.tipo == SN && token.valor.codSN == SN_VIRGULA){
+            while(token.tipo == SN && token.valor.codSN == SN_VIRGULA){
+                analex(fp);
+                if(tipo()){
+                    analex(fp);
+                    if(token.tipo == ID){
+                        analex(fp);
+                    }
+                }
+                else{
+                    printf("ERRO, token inesperado na linha %d", contlin);
+                }
+            }
+        }
+    }
+    else{
+        printf("ERRO, token inesperado na linha %d", contlin);
+    }
+}
