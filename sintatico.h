@@ -42,10 +42,10 @@ void tipos_param();//ok
 void tipos_p_opc();//ok
 void cmd();
 void atrib();
-void expr();
-void expr_simp();
-void termo();
-void fator(); //fazendo
+int expr();
+int termo();
+int expr_simp();
+int fator(); //fazendo
 bool op_rel(); //ok
 void func(); // Adicionada para facilitar tratamento de funções. Não consta na gramatica
 void error(); // deixar codigo arrumado parte de erro
