@@ -274,8 +274,8 @@ void expr() {
 }
 void expr_simp() {
     analex(fp);
-    if((token.tipo == SN && (token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO)) || termo()) {
-
+    if((token.tipo == SN && (token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO))) {
+        termo();
         if(token.tipo == SN) { // se for SN TEM QUE SER  + ou -
             if(token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO) {
 
@@ -291,10 +291,7 @@ void expr_simp() {
             if(token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO || token.valor.codSN == SN_OR || termo()) {
                 while(token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO || token.valor.codSN == SN_OR) {
                     analex(fp);
-                    if(termo()) {
-
-                    } else {
-                        error();
+                    termo();
                     }
                 }
 
@@ -302,7 +299,7 @@ void expr_simp() {
         }
 
     }
-}
+
 
 void fator() {
     analex(fp);
@@ -318,11 +315,7 @@ void fator() {
                     expr();
                 }
                 analex(fp);
-                if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-                    analex(fp);
-                } else {
-                    error();
-                }
+
             }
         } else {
             analex(fp);
@@ -333,16 +326,13 @@ void fator() {
     } else if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
         expr();
         analex(fp);
-        if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-            analex(fp);
-        } else {
-            error();
-        }
-    } else if(token.tipo == SN && token.valor.codSN == SN_NEGACAO) {
-        fator();
-    } else {
-        error();
     }
+    else if(token.tipo == SN && token.valor.codSN == SN_NEGACAO) {
+        fator();
+    }else{
+    error();
+    }
+
 }
 
 
