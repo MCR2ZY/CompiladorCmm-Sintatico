@@ -30,6 +30,8 @@ void sintatico()
     prog();
 }
 
+
+
 void prog()
 {
     while(!feof (fp))
@@ -407,6 +409,182 @@ void tipos_p_opc()
     }
 }
 
+
+
+int termo()
+{
+    if(fator())
+    {
+        analex(fp);
+        if(token.tipo == SN && (token.valor.codSN == SN_DIVISAO || token.valor.codSN == SN_AND || token.valor.codSN == SN_MULTIPLICACAO))
+        {
+            analex(fp);
+            if(fator()) {}
+            else
+            {
+                error();
+                return 1;
+            }
+        }
+    }
+    else
+    {
+        error();
+        return 1;
+    }
+    return 0;
+}
+void atrib()
+{
+    if(token.tipo == ID)
+    {
+
+    }
+}
+
+int expr()
+{
+    analex(fp);
+    if(expr_simp())
+    {
+        analex(fp);
+        if(op_rel())
+        {
+            analex(fp);
+            if(expr_simp())
+            {
+
+            }
+            else
+            {
+                error();
+                return 1;
+            }
+        }
+    }
+
+
+    return 0;
+}
+int expr_simp()
+{
+    analex(fp);
+    if((token.tipo == SN && (token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO)) || termo())
+    {
+
+        if(token.tipo == SN) // se for SN TEM QUE SER  + ou -
+        {
+            if(token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO)
+            {
+
+            }
+            else
+            {
+                error();
+                return 1;
+            }
+
+        }
+
+        if(termo())
+        {
+            analex(fp);
+            if(token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO || token.valor.codSN == SN_OR || termo())
+            {
+                while(token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO || token.valor.codSN == SN_OR)
+                {
+                    analex(fp);
+                    if(termo())
+                    {
+
+                    }
+                    else
+                    {
+                        error();
+                    }
+                }
+
+            }
+        }
+
+    }
+    return 0;
+}
+
+int fator()
+{
+    if(token.tipo == ID || token.tipo == CT_I || token.tipo == CT_R || token.tipo == CT_C || (token.tipo == SN && token.valor.codSN == SN_NEGACAO))
+    {
+        analex(fp);
+        while(token.tipo == ID || token.tipo == CT_I || token.tipo == CT_R || token.tipo == CT_C || (token.tipo == SN && token.valor.codSN == SN_NEGACAO))
+        {
+            analex(fp);
+            if(token.tipo == ID)
+            {
+                analex(fp);
+                if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE)
+                {
+                    analex(fp);
+                    if(expr())
+                    {
+                        analex(fp);
+                    }
+                    else if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE)
+                    {
+                        analex(fp);
+                    }
+                    else if(token.tipo == SN && token.valor.codSN == SN_VIRGULA)
+                    {
+
+                        while(token.tipo == SN && token.valor.codSN == SN_VIRGULA)
+                        {
+                            if(token.tipo == SN && token.valor.codSN == SN_VIRGULA)
+                            {
+
+                            }
+                            else
+                            {
+                                error();
+                                return 1;
+                            }
+                            analex(fp);
+                            if(expr())
+                            {
+                                analex(fp);
+                            }
+                            else if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE)
+                            {
+                                analex(fp);
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+        }
+
+
+        if(token.tipo == SN && token.valor.codSN == SN_NEGACAO)
+        {
+            analex(fp);
+            if(fator())
+            {
+                analex(fp);
+            }
+            else
+            {
+                error();
+                return 1;
+            }
+        }
+
+    }
+    return 0;
+}
+
+
 bool op_rel()
 {
     analex(fp);
@@ -419,6 +597,3 @@ bool op_rel()
         return false;
     }
 }
-
-
-
