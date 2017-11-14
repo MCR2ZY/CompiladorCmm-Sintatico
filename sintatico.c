@@ -164,7 +164,45 @@ bool tipo() {
     }
 }
 
-void func() {}
+void func() {
+    tipos_param();
+    analex(fp);
+    if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+        analex(fp);
+        if(token.tipo == SN && token.valor.codSN == SN_ABRI_CHAVE) {
+            while(token.tipo != SN && token.valor.codSN != SN_FECHA_CHAVE) {
+                analex(fp);
+                if(tipo()) {
+                    analex(fp);
+                    if(token.tipo == ID) {
+                        analex(fp);
+                        while(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
+                            analex(fp);
+                            if(token.tipo == ID) {
+                                analex(fp);
+                            } else {
+                                error();
+                            }
+                        }
+                        if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+                            analex(fp);
+                        }
+                    } else {
+                        error();
+                    }
+                } else if (token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+                    analex(fp);
+                } else {
+                    cmd();
+                }
+            }
+        } else {
+            error();
+        }
+    } else {
+        error;
+    }
+}
 
 void tipos_param() {
     analex(fp);
