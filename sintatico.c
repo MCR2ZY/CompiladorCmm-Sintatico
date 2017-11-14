@@ -273,19 +273,11 @@ void tipos_p_opc() {
 }
 
 
-
-void termo() {
-    fator();
-    analex(fp);
-    if(token.tipo == SN && (token.valor.codSN == SN_DIVISAO || token.valor.codSN == SN_AND || token.valor.codSN == SN_MULTIPLICACAO)) {
-        analex(fp);
-        fator();
-    }
-}
-
 void atrib() {
     if(token.tipo == ID) {
-
+        //tratar atribuicao
+    }else{
+    error();
     }
 }
 
@@ -293,7 +285,10 @@ void expr() {
     expr_simp();
     analex(fp);
     if(op_rel()) {
+        analex(fp);
         expr_simp();
+    }else{
+    error();
     }
 }
 void expr_simp() {
@@ -301,29 +296,29 @@ void expr_simp() {
     if((token.tipo == SN && (token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO))) {
         termo();
         if(token.tipo == SN) { // se for SN TEM QUE SER  + ou -
-            if(token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO) {
-
+            if(token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO || token.valor.codSN == SN_OR) {
+                analex(fp);
+                termo();
             } else {
                 error();
-
             }
 
-        }
-
-        if(termo()) {
-            analex(fp);
-            if(token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO || token.valor.codSN == SN_OR || termo()) {
-                while(token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO || token.valor.codSN == SN_OR) {
-                    analex(fp);
-                    termo();
-                    }
-                }
-
-            }
         }
 
     }
+    termo(); //tratamento de termo puro (pode ocorrer)
+}
 
+void termo() {
+    fator();
+    analex(fp);
+    if(token.tipo == SN && (token.valor.codSN == SN_DIVISAO || token.valor.codSN == SN_AND || token.valor.codSN == SN_MULTIPLICACAO)) {
+       while(token.tipo == SN && (token.valor.codSN == SN_DIVISAO || token.valor.codSN == SN_AND || token.valor.codSN == SN_MULTIPLICACAO)) {
+        analex(fp);
+        fator();
+       }
+    }
+}
 
 void fator() {
     analex(fp);
@@ -350,15 +345,17 @@ void fator() {
     } else if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
         expr();
         analex(fp);
-    }
+        if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+            }else{
+                error();
+            }
+}
     else if(token.tipo == SN && token.valor.codSN == SN_NEGACAO) {
         fator();
     }else{
     error();
     }
-
 }
-
 
 bool op_rel() {
     analex(fp);
