@@ -272,6 +272,174 @@ void tipos_p_opc() {
     }
 }
 
+void cmd() {
+    analex(fp);
+    if(token.tipo == PR && token.valor.codPR == PR_SE) {
+        analex(fp);
+        if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
+            expr();
+            if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+                cmd();
+                analex(fp);
+                if(token.tipo == PR && token.valor.codPR == PR_SENAO) {
+                    cmd();
+                }
+            } else {
+                error();
+            }
+        } else {
+            error();;
+        }
+    } else if(token.tipo == PR && token.valor.codPR == PR_ENQUANTO) {
+        analex(fp);
+        if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
+            expr();
+            analex(fp);
+            if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+                cmd();
+            } else {
+                error();
+            }
+        } else {
+            error();
+        }
+    } else if(token.tipo == PR && token.valor.codPR == PR_PARA) {
+        analex(fp);
+        if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
+            if(token.tipo != SN && token.valor.codSN != SN_PTO_VIRGULA) {
+                atrib();
+                analex(fp);;
+                if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+                    analex(fp);
+                    if(token.tipo != SN && token.valor.codSN != SN_PTO_VIRGULA) {
+                        expr();
+                        analex(fp);
+                        if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+                            analex(fp) 
+                            if(token.tipo != SN && token.valor.codSN != SN_FECHA_PARENTESE) {
+                                atrib();
+                                analex(fp);
+                                if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+                                    cmd();
+                                } else {
+                                    error();
+                                }
+                            } else {
+                                cmd();
+                            }
+                        } else {
+                            error();
+                        }
+                    } else {
+                        analex(fp);
+                        if(token.tipo != SN && token.valor.codSN != SN_FECHA_PARENTESE) {
+                            atrib();
+                            analex(fp);
+                            if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+                                cmd();
+                            } else {
+                                error();
+                            }
+                        } else {
+                            cmd();
+                        }
+                    }
+                } else {
+                    error();
+                }
+            } else {
+                analex();
+                if(token.tipo != SN && token.valor.codSN != SN_PTO_VIRGULA) {
+                    expr();
+                    if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+                        analex();
+                        if(token.tipo != SN && token.valor.codSN != SN_FECHA_PARENTESE) {
+                            atrib();
+                            analex(fp);
+                            if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+                                cmd();
+                            } else {
+                                error();
+                            }
+                        } else {
+                            cmd();
+                        }
+                    } else {
+                        error();
+                    }
+                } else {
+                    analex(fp);
+                    if(token.tipo != SN && token.valor.codSN != SN_FECHA_PARENTESE) {
+                        atrib();
+                        analex(fp);
+                        if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+                            cmd();
+                        } else {
+                            error();
+                        }
+                    } else {
+                        cmd();
+                    }  
+                }
+            }
+        } else {
+            error();
+        }
+    } else if(token.tipo == PR && token.valor.codPR == PR_RETORNE) {
+        analex(fp);
+        if(token.tipo != SN && token.valor.codSN != SN_PTO_VIRGULA) {
+            expr();
+            analex(fp);
+            if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+            } else {
+                error();
+            }
+        }
+    } else if(token.tipo == ID) {
+        if(tokenNext.tipo == SN && tokenNext.valor.codSN == SN_ATRIBUICAO) {
+            atrib();
+        } else if(tokenNext.tipo == SN && tokenNext.valor.codSN == SN_ABRI_PARENTESE) {
+            analex(fp);
+            if(token.tipo != SN && token.valor.codSN != SN_FECHA_PARENTESE) {
+                expr();
+                analex(fp);
+                while(token.tipo == ID && token.tipo == SN_VIRGULA) {
+                    expr();
+                    analex(fp);
+                }
+                if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+                    analex(fp);
+                    if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+                    } else {
+                        error();
+                    }
+                } else {
+                    error();
+                }
+            } else {
+                analex(fp);
+                if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+                } else {
+                    error();
+                }
+            }
+        } else {
+            error();
+        }
+    } else if(token.tipo == SN && token.valor.codSN == SN_ABRI_CHAVE) {
+        analex(fp);
+        if(token.tipo != SN && token.valor.codSN != SN_FECHA_CHAVE) {
+            while(token.tipo != SN && token.valor.codSN != SN_FECHA_CHAVE) {
+                cmd();
+            }
+        } else {
+            error();
+        }
+    } else if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+    } else {
+        error();
+    }
+}
 
 void atrib() {
     if(token.tipo == ID) {
