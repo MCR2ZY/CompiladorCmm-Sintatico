@@ -200,7 +200,7 @@ void func() {
             error();
         }
     } else {
-        error;
+        error();
     }
 }
 
@@ -225,20 +225,6 @@ void tipos_param() {
                     } else {
                         error();
                     }
-                }
-            }
-        } else if(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
-            while(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
-                analex(fp);
-                if(tipo()) {
-                    analex(fp);
-                    if(token.tipo == ID) {
-                        analex(fp);
-                    } else {
-                        error();
-                    }
-                } else {
-                    error();
                 }
             }
         }
