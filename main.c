@@ -15,11 +15,11 @@ FILE *fp;
 
 int main(int argc, char const *argv[])
 {
-    char nomeFile[tamNomeFile];
+    //char nomeFile[tamNomeFile];
 
-    printf("Insira o nome do arquivo(nomeArquivo.extensao):\n");
-    scanf(" %s", nomeFile);
-    fp = fopen(nomeFile, "r+");
+    //printf("Insira o nome do arquivo(nomeArquivo.extensao):\n");
+    //scanf(" %s", nomeFile);
+    fp = fopen("cod.txt", "r+");
 
     if(fp==NULL){
         printf("\n\tERRO AO ABRIR ARQUIVO");
@@ -27,7 +27,7 @@ int main(int argc, char const *argv[])
         exit(1);
     }
 
-    //analex(fp);
+    analex(fp);
     sintatico();
     printf("\n\nFECHANDO ARQUIVO...\n");
     fclose(fp);
