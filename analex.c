@@ -11,6 +11,8 @@
 
 int contlin = 1;                // Contador de linhas
 Token token;                    // Recebe o token do analisador lexico
+Token tokenNext;
+
 char TabPalReservadas[QntPalReservadas][TamPalReservadas] = {
         "booleano",        "caracter",        "enquanto",
         "inteiro",         "para",            "real",
@@ -25,6 +27,8 @@ void analex(FILE *fp){
     char c;                             // Recebe o caracter do arquivo
     char literal[TamLexema];           // Vetor temporario que guarda o literal
     char numero[TamNum];               // Vetor temporario que guarda o numero
+
+    token = tokenNext;
 
     while(1){
 
@@ -106,7 +110,7 @@ void analex(FILE *fp){
                     estado = 47;
                 }
                 else{
-                    token = exceptionToken();
+                    tokenNext = exceptionToken();
                     return;
                 }
                 break;
@@ -125,14 +129,14 @@ void analex(FILE *fp){
                 ungetc(c, fp);
                 for(i = 0; i < QntPalReservadas; i++){
                     if(!strcmp(literal, TabPalReservadas[i])){
-                        token.tipo = PR;
-                        strcpy(token.lexema, literal);
-                        token.valor.codPR = i;
+                        tokenNext.tipo = PR;
+                        strcpy(tokenNext.lexema, literal);
+                        tokenNext.valor.codPR = i;
                         return;
                     }
                 }
-                token.tipo = ID;
-                strcpy(token.lexema, literal);
+                tokenNext.tipo = ID;
+                strcpy(tokenNext.lexema, literal);
                 return;
                 break;
             case 3:
@@ -150,8 +154,8 @@ void analex(FILE *fp){
             case 4:
                 ungetc(c, fp);
                 numero[p] = EOS;
-                token.tipo = CT_I;
-                token.valor.valorInt = atoi(numero);    // converter string para inteiro
+                tokenNext.tipo = CT_I;
+                tokenNext.valor.valorInt = atoi(numero);    // converter string para inteiro
                 return;
                 break;
             case 5:
@@ -161,7 +165,7 @@ void analex(FILE *fp){
                 if(isdigit(c)){
                     estado = 6;
                 }else{
-                    token = exceptionToken();
+                    tokenNext = exceptionToken();
                     return;
                 }
                 break;
@@ -178,8 +182,8 @@ void analex(FILE *fp){
             case 7:
                 ungetc(c, fp);
                 numero[p] = EOS;
-                token.tipo = CT_R;
-                token.valor.valorReal = atof(numero);   // Converter string para num real
+                tokenNext.tipo = CT_R;
+                tokenNext.valor.valorReal = atof(numero);   // Converter string para num real
                 return;
                 break;
             case 8:
@@ -199,7 +203,7 @@ void analex(FILE *fp){
                 if(c == '\''){
                     estado = 10;
                 }else{
-                    token = exceptionToken();
+                    tokenNext = exceptionToken();
                     return;
                 }
                 break;
@@ -207,8 +211,8 @@ void analex(FILE *fp){
                 literal[p] = c;
                 p++;
                 literal[p] = EOS;
-                token.tipo = CT_C;
-                strcpy(token.lexema, literal);
+                tokenNext.tipo = CT_C;
+                strcpy(tokenNext.lexema, literal);
                 return;
                 break;
             case 11:
@@ -220,7 +224,7 @@ void analex(FILE *fp){
                 }else if(c == 'n'){
                     estado = 14;
                 }else {
-                    token = exceptionToken();
+                    tokenNext = exceptionToken();
                     return;
                 }
                 break;
@@ -231,7 +235,7 @@ void analex(FILE *fp){
                 if(c == '\''){
                     estado = 13;
                 }else{
-                    token = exceptionToken();
+                    tokenNext = exceptionToken();
                     return;
                 }
                 break;
@@ -239,8 +243,8 @@ void analex(FILE *fp){
                 literal[p] = c;
                 p++;
                 literal[p] = EOS;
-                token.tipo = CT_C;
-                strcpy(token.lexema, literal);
+                tokenNext.tipo = CT_C;
+                strcpy(tokenNext.lexema, literal);
                 return;
                 break;
             case 14:
@@ -250,7 +254,7 @@ void analex(FILE *fp){
                 if(c == '\''){
                     estado = 15;
                 }else{
-                    token = exceptionToken();
+                    tokenNext = exceptionToken();
                     return;
                 }
                 break;
@@ -258,8 +262,8 @@ void analex(FILE *fp){
                 literal[p] = c;
                 p++;
                 literal[p] = EOS;
-                token.tipo = CT_C;
-                strcpy(token.lexema, literal);
+                tokenNext.tipo = CT_C;
+                strcpy(tokenNext.lexema, literal);
                 return;
                 break;
             case 16:
@@ -271,7 +275,7 @@ void analex(FILE *fp){
                 }else if(c == '\"'){
                     estado = 17;
                 }else{
-                    token = exceptionToken();
+                    tokenNext = exceptionToken();
                     return;
                 }
                 break;
@@ -279,50 +283,50 @@ void analex(FILE *fp){
                 literal[p] = c;
                 p++;
                 literal[p] = EOS;
-                token.tipo = CT_L;
-                strcpy(token.lexema, literal);
+                tokenNext.tipo = CT_L;
+                strcpy(tokenNext.lexema, literal);
                 return;
                 break;
             case 18:
-                token.tipo = SN;
-                token.valor.codSN = SN_PTO_VIRGULA;
-                strcpy(token.lexema, ";");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_PTO_VIRGULA;
+                strcpy(tokenNext.lexema, ";");
                 return;
                 break;
             case 19:
-                token.tipo = SN;
-                token.valor.codSN = SN_ABRI_PARENTESE;
-                strcpy(token.lexema, "(");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_ABRI_PARENTESE;
+                strcpy(tokenNext.lexema, "(");
                 return;
                 break;
             case 20:
-                token.tipo = SN;
-                token.valor.codSN = SN_FECHA_PARENTESE;
-                strcpy(token.lexema, ")");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_FECHA_PARENTESE;
+                strcpy(tokenNext.lexema, ")");
                 return;
                 break;
             case 21:
-                token.tipo = SN;
-                token.valor.codSN = SN_SUBTRACAO;
-                strcpy(token.lexema,"-");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_SUBTRACAO;
+                strcpy(tokenNext.lexema,"-");
                 return;
                 break;
             case 22:
-                token.tipo = SN;
-                token.valor.codSN = SN_SOMA;
-                strcpy(token.lexema, "+");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_SOMA;
+                strcpy(tokenNext.lexema, "+");
                 return;
                 break;
             case 23:
-                token.tipo = SN;
-                token.valor.codSN = SN_MULTIPLICACAO;
-                strcpy(token.lexema, "*");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_MULTIPLICACAO;
+                strcpy(tokenNext.lexema, "*");
                 return;
                 break;
             case 24:
-                token.tipo = SN;
-                token.valor.codSN = SN_VIRGULA;
-                strcpy(token.lexema, ",");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_VIRGULA;
+                strcpy(tokenNext.lexema, ",");
                 return;
                 break;
             case 25:
@@ -330,14 +334,14 @@ void analex(FILE *fp){
                 if(c == '&'){
                     estado = 26;
                 }else{
-                    token = exceptionToken();
+                    tokenNext = exceptionToken();
                     return;
                 }
                 break;
             case 26:
-                token.tipo = SN;
-                token.valor.codSN = SN_AND;
-                strcpy(token.lexema, "&&");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_AND;
+                strcpy(tokenNext.lexema, "&&");
                 return;
                 break;
             case 27:
@@ -345,14 +349,14 @@ void analex(FILE *fp){
                 if(c == '|'){
                     estado = 28;
                 }else{
-                    token = exceptionToken();
+                    tokenNext = exceptionToken();
                     return;
                 }
                 break;
             case 28:
-                token.tipo = SN;
-                token.valor.codSN = SN_OR;
-                strcpy(token.lexema, "||");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_OR;
+                strcpy(tokenNext.lexema, "||");
                 return;
                 break;
             case 29:
@@ -365,15 +369,15 @@ void analex(FILE *fp){
                 break;
             case 30:
                 ungetc(c, fp);
-                token.tipo = SN;
-                token.valor.codSN = SN_MENOR;
-                strcpy (token.lexema, "<");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_MENOR;
+                strcpy (tokenNext.lexema, "<");
                 return;
                 break;
             case 31:
-                token.tipo = SN;
-                token.valor.codSN = SN_MENOR_IGUAL;
-                strcpy (token.lexema, "<=");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_MENOR_IGUAL;
+                strcpy (tokenNext.lexema, "<=");
                 return;
                 break;
             case 32:
@@ -386,15 +390,15 @@ void analex(FILE *fp){
                 break;
             case 33:
                 ungetc(c, fp);
-                token.tipo = SN;
-                token.valor.codSN = SN_MAIOR;
-                strcpy (token.lexema, ">");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_MAIOR;
+                strcpy (tokenNext.lexema, ">");
                 return;
                 break;
             case 34:
-                token.tipo = SN;
-                token.valor.codSN = SN_MAIOR_IGUAL;
-                strcpy (token.lexema, ">=");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_MAIOR_IGUAL;
+                strcpy (tokenNext.lexema, ">=");
                 return;
                 break;
             case 35:
@@ -407,15 +411,15 @@ void analex(FILE *fp){
                 break;
             case 36:
                 ungetc(c, fp);
-                token.tipo = SN;
-                token.valor.codSN = SN_ATRIBUICAO;
-                strcpy (token.lexema, "=");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_ATRIBUICAO;
+                strcpy (tokenNext.lexema, "=");
                 return;
                 break;
             case 37:
-                token.tipo = SN;
-                token.valor.codSN = SN_COMPARACAO;
-                strcpy(token.lexema, "==");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_COMPARACAO;
+                strcpy(tokenNext.lexema, "==");
                 return;
                 break;
             case 38:
@@ -428,15 +432,15 @@ void analex(FILE *fp){
                 break;
             case 39:
                 ungetc(c, fp);
-                token.tipo = SN;
-                token.valor.codSN = SN_NEGACAO;
-                strcpy(token.lexema, "!");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_NEGACAO;
+                strcpy(tokenNext.lexema, "!");
                 return;
                 break;
             case 40:
-                token.tipo = SN;
-                token.valor.codSN = SN_DIFERENTE;
-                strcpy(token.lexema, "!=");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_DIFERENTE;
+                strcpy(tokenNext.lexema, "!=");
                 return;
                 break;
             case 41:
@@ -449,9 +453,9 @@ void analex(FILE *fp){
                 break;
             case 42:
                 ungetc(c, fp);
-                token.tipo = SN;
-                token.valor.codSN = SN_DIVISAO;
-                strcpy (token.lexema, "/");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_DIVISAO;
+                strcpy (tokenNext.lexema, "/");
                 return;
                 break;
             case 43:
@@ -478,20 +482,20 @@ void analex(FILE *fp){
                 }
                 break;
             case 45:
-                token.tipo = SN;
-                token.valor.codSN = SN_ABRI_CHAVE;
-                strcpy(token.lexema, "{");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_ABRI_CHAVE;
+                strcpy(tokenNext.lexema, "{");
                 return;
                 break;
             case 46:
-                token.tipo = SN;
-                token.valor.codSN = SN_FECHA_CHAVE;
-                strcpy(token.lexema, "}");
+                tokenNext.tipo = SN;
+                tokenNext.valor.codSN = SN_FECHA_CHAVE;
+                strcpy(tokenNext.lexema, "}");
                 return;
                 break;
             case 47:
-                token.tipo = END;
-                token.valor.valorInt=0;
+                tokenNext.tipo = END;
+                tokenNext.valor.valorInt=0;
                 return;
             default:
                 printf("\n\tErro Léxico!!!\n");
