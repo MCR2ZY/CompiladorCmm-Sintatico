@@ -304,7 +304,7 @@ void cmd() {
                 error();
             }
         } else {
-            error();;
+            error();
         }
     } else if(token.tipo == PR && token.valor.codPR == PR_ENQUANTO) {
         analex(fp);
@@ -324,74 +324,33 @@ void cmd() {
         if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
             analex(fp);
             if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
-                analex(fp);
-                if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA){
-                    analex(fp);
-                    if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-                        analex(fp);
-                        cmd();
-                    } else {
-                        atrib();
-                        analex(fp);
-                        if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-                            analex(fp);
-                            cmd();
-                        } else {
-                            error();
-                        }
-                    }
-                } else {
-                    expr();
-                    analex(fp);
-                    if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA){
-                        analex(fp);
-                        if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-                            analex(fp);
-                            cmd();
-                        } else {
-                            atrib();
-                            analex(fp);
-                            if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-                                analex(fp);
-                                cmd();
-                            } else {
-                                error();
-                            }
-                        }
-                    } else {
-                        error();
-                    }
-                }
+
             } else {
                 atrib();
                 if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
                     analex(fp);
-                    if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-                        analex(fp);
-                        cmd();
-                    } else {
-                        error();
-                    }
-                } else {
-                    expr();
-                    analex(fp);
                     if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
-                        analex(fp);
-                        if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+
+                    } else {
+                        expr();
+                        if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
                             analex(fp);
-                            cmd();
-                        } else {
-                            atrib();
-                            if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-                                analex(fp);
-                                cmd();
+                            if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
+
                             } else {
-                                error();
+                                atrib(fp);
+                                analex(fp);
+                                if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE){
+                                    analex(fp);
+                                    cmd();
+                                }
                             }
                         }
                     }
                 }
             }
+        } else {
+            error();
         }
     } else if(token.tipo == PR && token.valor.codPR == PR_RETORNE) {
         analex(fp);
@@ -480,12 +439,14 @@ void expr() {
     expr_simp();
     analex(fp);
     if(op_rel()) {
+        analex(fp);
         expr_simp();
+        analex(fp);
     }
 }
 
 void expr_simp() {
-    if((token.tipo == SN && (token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO))) {
+    if(token.tipo == SN && (token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO)) {
         termo();
         while(token.tipo == SN && (token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO || token.valor.codSN == SN_OR)) {
             analex(fp);
@@ -493,6 +454,9 @@ void expr_simp() {
         }
     } else {
         termo(); //tratamento de termo puro (pode ocorrer)
+        while(token.tipo == SN && (token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO || token.valor.codSN == SN_OR)){
+            expr_simp();
+        }
     }
 }
 
@@ -527,13 +491,12 @@ void fator() {
         expr();
         analex(fp);
         if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-            }else{
-                error();
-            }
-}
-    else if(token.tipo == SN && token.valor.codSN == SN_NEGACAO) {
+        } else {
+            error();
+        }
+    } else if(token.tipo == SN && token.valor.codSN == SN_NEGACAO) {
         fator();
-    }else{
+    } else {
     error();
     }
 }
