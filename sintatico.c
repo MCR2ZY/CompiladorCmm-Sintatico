@@ -10,6 +10,7 @@
 
 #include "sintatico.h"
 #include "analex.h"
+#include "gerenTabSimb.h"
 
 Simbolo TabelaSimbolos[QntSimbolos];
 
