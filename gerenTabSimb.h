@@ -22,13 +22,17 @@ typedef struct simbolo{
     TipoSimbolo tipo;
     CategoriaSimbolo categoria;
     EscopoSimbolo escopo;
-    int excluido; // bool. Verdadeira se função do parametro já foi terminada
+    int zumbi; // bool. Verdadeira se funcao do parametro ja foi terminada
 } Simbolo;
 
 void addTabSimbolo();
-void checaTabSimbolo();
+bool checaTabSimbolo();
 void removeTabSimbolo();
 
 extern Simbolo TabelaSimbolos[QntSimbolos];
+extern CategoriaSimbolo catSimbolo;
+extern EscopoSimbolo escSimbolo;
+extern TipoSimbolo tipSimbolo;
+
 
 #endif // GERENTABSIMB_H_INCLUDED
