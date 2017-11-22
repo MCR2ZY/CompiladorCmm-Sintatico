@@ -1,3 +1,13 @@
+/**
+******************************************************************************
+* @file	gerenTabSimb.h
+* @author Marcelo Henrique, Mauricio Souza
+* @version x.x
+* @date 22.11.17
+* @brief Gerenciador da Tabela de Simbolos
+******************************************************************************
+*/
+
 #ifndef GERENTABSIMB_H_INCLUDED
 #define GERENTABSIMB_H_INCLUDED
 
@@ -5,19 +15,19 @@
 
 #define QntSimbolos 100
 
-typedef enum tipoSimbolo{
+typedef enum tipoSimbolo {
     BOOLEANO, CARACTER, INTEIRO, REAL, SEMRETORNO
 } TipoSimbolo;
 
-typedef enum categoriaSimbolo{
+typedef enum categoriaSimbolo {
     FUNCAO, PARAMETRO, VARIAVEL
 } CategoriaSimbolo;
 
-typedef enum escopoSimbolo{
+typedef enum escopoSimbolo {
     GLOBAL, LOCAL
 } EscopoSimbolo;
 
-typedef struct simbolo{
+typedef struct simbolo {
     char lexema[TamLexema];
     TipoSimbolo tipo;
     CategoriaSimbolo categoria;
