@@ -24,7 +24,7 @@ void sintatico() {
 }
 
 void prog() {
-    while(!feof (fp)) {
+    while(true) {
         analex(fp);
         // Trata declaracao de ID's e Funcoes
         if(tipo()) {
@@ -154,6 +154,7 @@ void prog() {
             }
         } else if(token.tipo == END) {
             printf("ANALISE SINTATICA REALIZADA COM SUCESSO");
+            exit(EXIT_SUCCESS);
         } else {
             error();
         }
@@ -422,6 +423,8 @@ void cmd() {
             } else {
                 error();
             }
+        } else {
+            return;
         }
     } else if(token.tipo == ID) {
         if(tokenNext.tipo == SN && tokenNext.valor.codSN == SN_ATRIBUICAO) {
@@ -456,6 +459,7 @@ void cmd() {
                 } else if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
                     analex(fp);
                     if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+                        return;
                     } else {
                         error();
                     }
@@ -483,10 +487,10 @@ void cmd() {
 }
 
 void atrib() {
-    analex(fp);
     if(token.tipo == ID) {
         analex(fp);
         if(token.tipo == SN && token.valor.codSN == SN_ATRIBUICAO) {
+            analex(fp);
             expr();
         } else {
             error();
@@ -499,7 +503,8 @@ void atrib() {
 
 void expr() {
     expr_simp();
-    if(op_rel) {
+    if(op_rel()) {
+        analex(fp);
         expr_simp();
     }
     return;
@@ -514,7 +519,6 @@ void expr_simp() {
             termo();
         }
     } else {
-        analex(fp);
         termo();
         while(token.tipo == SN && (token.valor.codSN == SN_SOMA || token.valor.codSN == SN_SUBTRACAO || token.valor.codSN == SN_OR)) {
             analex(fp);
@@ -526,6 +530,7 @@ void expr_simp() {
 
 void termo() {
     fator();
+    //analex(fp);
     while(tokenNext.tipo == SN && (tokenNext.valor.codSN == SN_MULTIPLICACAO || tokenNext.valor.codSN == SN_DIVISAO || tokenNext.valor.codSN == SN_AND)) {
         analex(fp);
         fator();;
@@ -535,6 +540,7 @@ void termo() {
 
 void fator() {
     if(token.tipo == CT_I || token.tipo == CT_R || token.tipo == CT_C || token.tipo == CT_L) {
+        analex(fp);
         return;
     } else if(token.tipo == ID) {
         if(tokenNext.tipo == SN && tokenNext.valor.codSN == SN_ABRI_PARENTESE) {
@@ -548,15 +554,18 @@ void fator() {
                     expr();
                 }
                 if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+                    analex(fp);
                     return;
                 } else {
                     error();
                 }
             }
         } else {
+            analex(fp);
             return;
         }
     } else if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
+        analex(fp);
         expr();
         if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
             return;
