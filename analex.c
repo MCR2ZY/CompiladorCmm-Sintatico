@@ -493,5 +493,5 @@ Token exceptionToken() {
 }
 void error() { // func erro [organizacao de codigo]
     printf("ERRO, token inesperado na linha %d", contlin);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
