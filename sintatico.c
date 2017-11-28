@@ -204,7 +204,6 @@ void func() {
             if(token.tipo != SN || token.valor.codSN != SN_FECHA_CHAVE) {
                 while(token.tipo != SN || token.valor.codSN != SN_FECHA_CHAVE) {
                     cmd();
-                    analex(fp);
                 }
             }
         } else {
@@ -298,9 +297,10 @@ void cmd() {
             analex(fp);
             expr();
             if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-                cmd();
                 analex(fp);
+                cmd();
                 if(token.tipo == PR && token.valor.codPR == PR_SENAO) {
+                    analex(fp);
                     cmd();
                 }
             } else {
@@ -417,7 +417,6 @@ void cmd() {
         analex(fp);
         if(token.tipo != SN || token.valor.codSN != SN_PTO_VIRGULA) {
             expr();
-            analex(fp);
             if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
                 analex(fp);
             } else {
@@ -480,6 +479,7 @@ void cmd() {
             error();
         }
     } else if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+        analex(fp);
         return;
     } else {
         error();
@@ -554,7 +554,6 @@ void fator() {
                     expr();
                 }
                 if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
-                    analex(fp);
                     return;
                 } else {
                     error();
@@ -568,6 +567,7 @@ void fator() {
         analex(fp);
         expr();
         if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+            analex(fp);
             return;
         } else {
             error();
