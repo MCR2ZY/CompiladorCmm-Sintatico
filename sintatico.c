@@ -9,44 +9,63 @@
 */
 
 #include "sintatico.h"
-#include "analex.h"
-#include "gerenTabSimb.h"
-
-Simbolo TabelaSimbolos[QntSimbolos];
+#include "gerenTabSimb.c"
 
 FILE *fp;
 Token token;
 Token tokenNext;
 int contlin;
 
+CategoriaSimbolo catSimbolo;
+EscopoSimbolo escSimbolo;
+TipoSimbolo tipSimbolo;
+Token tokenTabSimb;
+
 void sintatico() {
     prog();
 }
 
 void prog() {
+    escSimbolo = GLOBAL;
     while(true) {
         analex(fp);
         // Trata declaracao de ID's e Funcoes
         if(tipo()) {
+            tipSimbolo = token.valor.codPR;
             analex(fp);
             if(token.tipo == ID) {
+                tokenTabSimb = token;
                 analex(fp);
                 if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
+                    escSimbolo = GLOBAL;
+                    catSimbolo = FUNCAO;
+                    addTabSimbolo();
                     func();                 // Tratamendo do restante da funcao //
                 } else if(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
                     while(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
+                        catSimbolo = VARIAVEL;
+                        addTabSimbolo();
                         analex(fp);
                         if(token.tipo == ID) {
+                            catSimbolo = VARIAVEL;
+                            addTabSimbolo();
                             analex(fp);
                         } else {
                             error();
                         }
                     }
-                    if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {}
+                    if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+                        catSimbolo = VARIAVEL;
+                        addTabSimbolo();
+                    }
                     else {
                         error();
                     }
-                } else if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {}
+                } else if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
+                    catSimbolo = VARIAVEL;
+                    addTabSimbolo();
+                    return;
+                }
                 else {
                     error();
                 }
@@ -98,8 +117,12 @@ void prog() {
                     error();
                 }
             } else if(token.tipo == PR && token.valor.codPR == PR_SEM_RETORNO) {
+                tipSimbolo = token.valor.codPR;
+                catSimbolo = FUNCAO;
                 analex(fp);
                 if(token.tipo == ID) {
+                    tokenTabSimb = token;
+                    addTabSimbolo();
                     analex(fp);
                     if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
                         tipos_p_opc();
@@ -162,20 +185,27 @@ void prog() {
 }
 
 void func() {
+    escSimbolo = LOCAL;
     tipos_param();
+    catSimbolo = VARIAVEL;
     if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
         analex(fp);
         if(token.tipo == SN && token.valor.codSN == SN_ABRI_CHAVE) {
             analex(fp);
             if(tipo()) {
                 while(tipo()) {
+                    tipSimbolo = token.valor.codPR;
                     analex(fp);
                     if(token.tipo == ID) {
+                        tokenTabSimb = token;
+                        addTabSimbolo();
                         analex(fp);
                         if(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
                             while(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
                                 analex(fp);
                                 if(token.tipo == ID) {
+                                    tokenTabSimb = token;
+                                    addTabSimbolo();
                                     analex(fp);
                                 } else {
                                     error();
@@ -192,6 +222,7 @@ void func() {
                                 while(token.tipo != SN || token.valor.codSN != SN_FECHA_CHAVE) {
                                     cmd();
                                 }
+                                removeTabSimbolo();
                             }
                         } else {
                             error();
@@ -205,6 +236,7 @@ void func() {
                 while(token.tipo != SN || token.valor.codSN != SN_FECHA_CHAVE) {
                     cmd();
                 }
+                removeTabSimbolo();
             }
         } else {
             error();
@@ -224,18 +256,26 @@ bool tipo() {
 
 void tipos_param() {
     analex(fp);
+    escSimbolo = LOCAL;
+    catSimbolo = PARAMETRO;
     if(token.tipo == PR && token.valor.codPR == PR_SEM_PARAM) {
         analex(fp);
+        return;
     } else if(tipo()) {
+        tipSimbolo = token.valor.codPR;
         analex(fp);
         if(token.tipo == ID) {
+            tokenTabSimb = token;
+            addTabSimbolo();
             analex(fp);
             if(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
                 while(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
                     analex(fp);
                     if(tipo()) {
+                        tipSimbolo = token.valor.codPR;
                         analex(fp);
                         if(token.tipo == ID) {
+                            addTabSimbolo();
                             analex(fp);
                         } else {
                             error();
