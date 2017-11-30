@@ -44,5 +44,7 @@ extern CategoriaSimbolo catSimbolo;
 extern EscopoSimbolo escSimbolo;
 extern TipoSimbolo tipSimbolo;
 
+extern Token tokenTabSimb;
+
 
 #endif // GERENTABSIMB_H_INCLUDED
