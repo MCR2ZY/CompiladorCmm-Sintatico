@@ -14,37 +14,35 @@ Simbolo TabelaSimbolos[QntSimbolos];
 CategoriaSimbolo catSimbolo;
 EscopoSimbolo escSimbolo;
 TipoSimbolo tipSimbolo;
-int topo, i;
-Token token;
-Token tokenNext;
-topo = 0;
+int topo = 0, i;
+Token tokenTabSimb;
 
 void addTabSimbolo() {
     if(!checaTabSimbolo()) {
-        strcpy(TabelaSimbolos[topo].lexema, token.lexema);
+        strcpy(TabelaSimbolos[topo].lexema, tokenTabSimb.lexema);
         TabelaSimbolos[topo].tipo = tipSimbolo;
         TabelaSimbolos[topo].categoria = catSimbolo;
-        TabelaSimbolos[topo].escopo = escSimbolo;
         TabelaSimbolos[topo].escopo = escSimbolo;
         TabelaSimbolos[topo].zumbi = 0;
         topo++;
     } else {
         printf("\nErro, Redeclaracao!!!\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }
 
 void removeTabSimbolo() {
-    for(i = topo; TabelaSimbolos[i].categoria != PARAMETRO; topo--) {
+    while(TabelaSimbolos[topo].categoria != PARAMETRO && topo != 0) {
+        topo --;
     }
-    for(i = topo; TabelaSimbolos[i].categoria != FUNCAO; i--) {
+    for(i = topo; TabelaSimbolos[i].categoria != FUNCAO && i != 0; i--) {
         TabelaSimbolos[i].zumbi = 1;
     }
 }
 
 bool checaTabSimbolo() {
-    for(i = 0; i< topo; i++) {
-        if(TabelaSimbolos[i].lexema == token.lexema && TabelaSimbolos[i].escopo == escSimbolo && TabelaSimbolos[i].zumbi = 0) {
+    for(i = 0; i < topo; i++) {
+        if(!strcmp(TabelaSimbolos[i].lexema, tokenTabSimb.lexema) && (TabelaSimbolos[i].zumbi = 0 && TabelaSimbolos[i].escopo == escSimbolo)) {
             return true;
         }
     }
