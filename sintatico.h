@@ -11,6 +11,7 @@
 #define SINTATICO_H_INCLUDED
 
 #include "analex.h"
+#include "gerenTabSimb.h"
 
 void sintatico();
 void prog(); //ok
