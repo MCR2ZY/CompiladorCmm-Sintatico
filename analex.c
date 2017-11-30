@@ -14,10 +14,10 @@ Token token;                    // Recebe o token do analisador lexico
 Token tokenNext;
 
 char TabPalReservadas[QntPalReservadas][TamPalReservadas] = {
-    "booleano",        "caracter",        "enquanto",
-    "inteiro",         "para",            "real",
-    "retorne",         "se",              "semparam",
-    "semretorno",     "senao",            "prototipo"
+    "booleano",         "caracter",             "inteiro",
+    "real",             "semretorno",           "enquanto",
+    "retorne",          "se",                   "semparam",
+    "para",             "senao",                "prototipo"
 };
 
 void analex(FILE *fp) {

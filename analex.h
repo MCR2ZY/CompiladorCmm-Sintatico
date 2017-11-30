@@ -27,10 +27,10 @@
 
 
 typedef enum palReservada {
-    PR_BOOLEANO,        PR_CARACTER,        PR_ENQUANTO,
-    PR_INTEIRO,         PR_PARA,            PR_REAL,
+    PR_BOOLEANO,        PR_CARACTER,        PR_INTEIRO,
+    PR_REAL,            PR_SEM_RETORNO,     PR_ENQUANTO,
     PR_RETORNE,         PR_SE,              PR_SEM_PARAM,
-    PR_SEM_RETORNO,     PR_SENAO,           PR_PROTOTIPO
+    PR_PARA,            PR_SENAO,           PR_PROTOTIPO
 } PalReservada;
 
 typedef enum sinal {
