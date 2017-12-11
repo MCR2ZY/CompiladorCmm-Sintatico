@@ -41,10 +41,19 @@ void removeTabSimbolo() {
 }
 
 bool checaTabSimbolo() {
-    for(i = 0; i < topo; i++) {
-        if(!strcmp(TabelaSimbolos[i].lexema, tokenTabSimb.lexema) && (TabelaSimbolos[i].zumbi = 0 && TabelaSimbolos[i].escopo == escSimbolo)) {
-            return true;
+    if(catSimbolo == FUNCAO || escSimbolo == GLOBAL) {
+        for(i = topo -1; i >= 0 ; i--) {
+            if(!strcmp(TabelaSimbolos[i].lexema, tokenTabSimb.lexema) && (TabelaSimbolos[i].zumbi == 0 && TabelaSimbolos[i].escopo == escSimbolo)) {
+                return true;
+            }
         }
+        return false;
+    } else {
+        for(i = topo -1; i >= 0 && TabelaSimbolos[i].categoria != FUNCAO ; i--) {
+            if(!strcmp(TabelaSimbolos[i].lexema, tokenTabSimb.lexema) && (TabelaSimbolos[i].zumbi == 0 && TabelaSimbolos[i].escopo == escSimbolo)) {
+                return true;
+            }
+        }
+        return false;
     }
-    return false;
 }

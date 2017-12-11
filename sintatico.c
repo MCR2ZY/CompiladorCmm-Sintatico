@@ -26,8 +26,8 @@ void sintatico() {
 }
 
 void prog() {
-    escSimbolo = GLOBAL;
     while(true) {
+        escSimbolo = GLOBAL;
         analex(fp);
         // Trata declaracao de ID's e Funcoes
         if(tipo()) {
@@ -48,6 +48,7 @@ void prog() {
                         analex(fp);
                         if(token.tipo == ID) {
                             catSimbolo = VARIAVEL;
+                            tokenTabSimb = token;
                             addTabSimbolo();
                             analex(fp);
                         } else {
@@ -55,8 +56,6 @@ void prog() {
                         }
                     }
                     if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
-                        catSimbolo = VARIAVEL;
-                        addTabSimbolo();
                     }
                     else {
                         error();
@@ -64,7 +63,6 @@ void prog() {
                 } else if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
                     catSimbolo = VARIAVEL;
                     addTabSimbolo();
-                    return;
                 }
                 else {
                     error();
@@ -218,7 +216,7 @@ void func() {
                             }
                         } else if(token.tipo == SN && token.valor.codSN == SN_PTO_VIRGULA) {
                             analex(fp);
-                            if(token.tipo != SN || token.valor.codSN != SN_FECHA_CHAVE) {
+                            if((token.tipo != SN || token.valor.codSN != SN_FECHA_CHAVE) && !tipo()) {
                                 while(token.tipo != SN || token.valor.codSN != SN_FECHA_CHAVE) {
                                     cmd();
                                 }
