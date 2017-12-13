@@ -67,29 +67,30 @@ bool checaPrototipo() {
     while(TabelaSimbolos[funcAux].categoria != FUNCAO) {        //VARRE ATE A FUNCAO
         funcAux--;
     }
-    while((TabelaSimbolos[prototAux].categoria != PROTOTIPO && prototAux > -1){     //VARRE ATE O PROTOTIPO DA FUNCAO
-        if(strcmp(TabelaSimbolos[funcAux].lexema, TabelaSimbolos[prototAux].lexema) != 0) {
-            prototAux--;
-        } else {
-            break;
-        }
+    while((TabelaSimbolos[prototAux].categoria != PROTOTIPO && prototAux > -1) && strcmp(TabelaSimbolos[funcAux].lexema, TabelaSimbolos[prototAux].lexema) != 0) {     //VARRE ATE O PROTOTIPO DA FUNCAO
+        prototAux--;
     }
 
     if(prototAux == 0 && TabelaSimbolos[prototAux].categoria != PROTOTIPO){     //Funcao sem prototipo
         return true;
     } else {        //Funcao com prototipo; CHECA OS TIPOS
-        funcAux++;
-        prototAux++;
+        if(TabelaSimbolos[prototAux].tipo == TabelaSimbolos[funcAux].tipo) {
+            funcAux++;
+            prototAux++;
 
-        while(TabelaSimbolos[prototAux].categoria == PARAMETRO) {
-            if(TabelaSimbolos[prototAux].tipo == TabelaSimbolos[funcAux].tipo) {
-                funcAux++;
-                prototAux++;
-            } else {
-                printf("Conflict Tipe in line: %d", contlin);
-                return false;
+            while(TabelaSimbolos[prototAux].categoria == PARAMETRO) {
+                if(TabelaSimbolos[prototAux].tipo == TabelaSimbolos[funcAux].tipo) {
+                    funcAux++;
+                    prototAux++;
+                } else {
+                    printf("Conflict Tipe to parametrs. line: %d", contlin);
+                    return false;
+                }
             }
+            return true;
+        } else {
+            printf("Conflict Tipe to Func and Prototype. line: %d", contlin);
+            return false;
         }
-        return true;
     }
 }
