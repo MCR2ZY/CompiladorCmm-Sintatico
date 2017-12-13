@@ -69,10 +69,15 @@ void prog() {
                 }
             }
         } else if(token.tipo == PR && token.valor.codPR == PR_PROTOTIPO) {
+            catSimbolo = PROTOTIPO;
+            escSimbolo = GLOBAL;
             analex(fp);
             if(tipo()) {
+                tipSimbolo = token.valor.codPR;
                 analex(fp);
                 if(token.tipo == ID) {
+                    tokenTabSimb = token;
+                    addTabSimbolo();
                     analex(fp);
                     if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
                         tipos_p_opc();
@@ -164,8 +169,14 @@ void prog() {
                 }
             }
         } else if(token.tipo == PR && token.valor.codPR == PR_SEM_RETORNO) {
+            tipSimbolo = token.valor.codPR;
             analex(fp);
             if(token.tipo == ID) {
+                escSimbolo = GLOBAL;
+                catSimbolo = FUNCAO;
+                tokenTabSimb = token;
+
+                addTabSimbolo();
                 analex(fp);
                 if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
                     func();
@@ -185,6 +196,7 @@ void prog() {
 void func() {
     escSimbolo = LOCAL;
     tipos_param();
+    checaPrototipo();
     catSimbolo = VARIAVEL;
     if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
         analex(fp);

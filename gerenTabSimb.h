@@ -20,7 +20,7 @@ typedef enum tipoSimbolo {
 } TipoSimbolo;
 
 typedef enum categoriaSimbolo {
-    FUNCAO, PARAMETRO, VARIAVEL
+    FUNCAO, PARAMETRO, VARIAVEL, PROTOTIPO
 } CategoriaSimbolo;
 
 typedef enum escopoSimbolo {
@@ -38,6 +38,10 @@ typedef struct simbolo {
 void addTabSimbolo();
 bool checaTabSimbolo();
 void removeTabSimbolo();
+
+//Funcoes para checagem semantica
+
+bool checaPrototipo();
 
 extern Simbolo TabelaSimbolos[QntSimbolos];
 extern CategoriaSimbolo catSimbolo;

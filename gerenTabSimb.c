@@ -41,7 +41,7 @@ void removeTabSimbolo() {
 }
 
 bool checaTabSimbolo() {
-    if(catSimbolo == FUNCAO || escSimbolo == GLOBAL) {
+    if(catSimbolo == FUNCAO || catSimbolo == PROTOTIPO || escSimbolo == GLOBAL) {
         for(i = topo -1; i >= 0 ; i--) {
             if(!strcmp(TabelaSimbolos[i].lexema, tokenTabSimb.lexema) && (TabelaSimbolos[i].zumbi == 0 && TabelaSimbolos[i].escopo == escSimbolo)) {
                 return true;
@@ -55,5 +55,41 @@ bool checaTabSimbolo() {
             }
         }
         return false;
+    }
+}
+
+bool checaPrototipo() {
+    int prototAux, funcAux;
+
+    prototAux = funcAux = topo;
+    prototAux = funcAux -= 1;
+
+    while(TabelaSimbolos[funcAux].categoria != FUNCAO) {        //VARRE ATE A FUNCAO
+        funcAux--;
+    }
+    while((TabelaSimbolos[prototAux].categoria != PROTOTIPO && prototAux > -1){     //VARRE ATE O PROTOTIPO DA FUNCAO
+        if(strcmp(TabelaSimbolos[funcAux].lexema, TabelaSimbolos[prototAux].lexema) != 0) {
+            prototAux--;
+        } else {
+            break;
+        }
+    }
+
+    if(prototAux == 0 && TabelaSimbolos[prototAux].categoria != PROTOTIPO){     //Funcao sem prototipo
+        return true;
+    } else {        //Funcao com prototipo; CHECA OS TIPOS
+        funcAux++;
+        prototAux++;
+
+        while(TabelaSimbolos[prototAux].categoria == PARAMETRO) {
+            if(TabelaSimbolos[prototAux].tipo == TabelaSimbolos[funcAux].tipo) {
+                funcAux++;
+                prototAux++;
+            } else {
+                printf("Conflict Tipe in line: %d", contlin);
+                return false;
+            }
+        }
+        return true;
     }
 }
