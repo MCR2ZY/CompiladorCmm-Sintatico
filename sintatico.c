@@ -175,7 +175,6 @@ void prog() {
                 escSimbolo = GLOBAL;
                 catSimbolo = FUNCAO;
                 tokenTabSimb = token;
-
                 addTabSimbolo();
                 analex(fp);
                 if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
@@ -285,6 +284,7 @@ void tipos_param() {
                         tipSimbolo = token.valor.codPR;
                         analex(fp);
                         if(token.tipo == ID) {
+                            tokenTabSimb = token;
                             addTabSimbolo();
                             analex(fp);
                         } else {
@@ -303,9 +303,14 @@ void tipos_param() {
 
 void tipos_p_opc() {
     analex(fp);
+    escSimbolo = LOCAL;
+    catSimbolo = PARAMETRO;
     if(token.tipo == PR && token.valor.codPR == PR_SEM_PARAM) {
         analex(fp);
     } else if(tipo()) {
+        tipSimbolo = token.valor.codPR;
+        tokenTabSimb = token;
+        addTabSimbolo();
         analex(fp);
         if(token.tipo == ID) {
             analex(fp);
@@ -313,6 +318,9 @@ void tipos_p_opc() {
                 while(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
                     analex(fp);
                     if(tipo()) {
+                        tipSimbolo = token.valor.codPR;
+                        tokenTabSimb = token;
+                        addTabSimbolo();
                         analex(fp);
                         if(token.tipo == ID) {
                             analex(fp);
@@ -326,6 +334,9 @@ void tipos_p_opc() {
             while(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
                 analex(fp);
                 if(tipo()) {
+                    tipSimbolo = token.valor.codPR;
+                    tokenTabSimb = token;
+                    addTabSimbolo();
                     analex(fp);
                     if(token.tipo == ID) {
                         analex(fp);
