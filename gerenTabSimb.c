@@ -28,7 +28,7 @@ void addTabSimbolo() {
         TabelaSimbolos[topo].escopo = escSimbolo;
         TabelaSimbolos[topo].zumbi = 0;
     } else {
-        printf("\nErro, Redeclaracao!!!\n");
+        printf("\nErro, Redeclaracao na linha %d!!!\n", contlin);
         exit(EXIT_FAILURE);
     }
 }
@@ -52,7 +52,6 @@ bool checaTabSimbolo() {
         return false;
     } else if(catSimbolo == FUNCAO) {
         for(i = topo; i >= 0 ; i--) {
-
             if(!strcmp(TabelaSimbolos[i].lexema, tokenTabSimb.lexema) && (TabelaSimbolos[i].zumbi == 0 && TabelaSimbolos[i].escopo == escSimbolo) && TabelaSimbolos[i].categoria != PROTOTIPO) {
                 return true;
             }
@@ -76,7 +75,7 @@ bool checaPrototipo() {
     while(TabelaSimbolos[funcAux].categoria != FUNCAO) {        //VARRE ATE A FUNCAO
         funcAux--;
     }
-    while((TabelaSimbolos[prototAux].categoria != PROTOTIPO && prototAux > -1) || strcmp(TabelaSimbolos[funcAux].lexema, TabelaSimbolos[prototAux].lexema) != 0) {     //VARRE ATE O PROTOTIPO DA FUNCAO
+    while((TabelaSimbolos[prototAux].categoria != PROTOTIPO || strcmp(TabelaSimbolos[funcAux].lexema, TabelaSimbolos[prototAux].lexema) != 0) && prototAux > -1) {     //VARRE ATE O PROTOTIPO DA FUNCAO
         prototAux--;
     }
 
@@ -91,10 +90,15 @@ bool checaPrototipo() {
         qntParamFunc++;
     }
 
+    if(qntParamFunc + qntParamProtot == 0) {
+        return true;
+    }
+
     if(qntParamFunc != qntParamProtot) {
         printf("Conflict to numbers for parametrs. line: %d\n", contlin);
         return false;
     }
+
     //Funcao com prototipo; CHECA OS TIPOS
     if(TabelaSimbolos[prototAux].tipo == TabelaSimbolos[funcAux].tipo) {
         funcAux++;

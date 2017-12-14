@@ -42,12 +42,11 @@ void prog() {
                     addTabSimbolo();
                     func();                 // Tratamendo do restante da funcao //
                 } else if(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
+                    catSimbolo = VARIAVEL;
+                    addTabSimbolo();
                     while(token.tipo == SN && token.valor.codSN == SN_VIRGULA) {
-                        catSimbolo = VARIAVEL;
-                        addTabSimbolo();
                         analex(fp);
                         if(token.tipo == ID) {
-                            catSimbolo = VARIAVEL;
                             tokenTabSimb = token;
                             addTabSimbolo();
                             analex(fp);
@@ -121,7 +120,6 @@ void prog() {
                 }
             } else if(token.tipo == PR && token.valor.codPR == PR_SEM_RETORNO) {
                 tipSimbolo = token.valor.codPR;
-                catSimbolo = FUNCAO;
                 analex(fp);
                 if(token.tipo == ID) {
                     tokenTabSimb = token;
