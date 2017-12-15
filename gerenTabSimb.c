@@ -79,7 +79,7 @@ bool checaPrototipo() {
         prototAux--;
     }
 
-    if(prototAux == 0 && TabelaSimbolos[prototAux].categoria != PROTOTIPO){     //Funcao sem prototipo
+    if(prototAux == -1 && TabelaSimbolos[prototAux].categoria != PROTOTIPO){     //Funcao sem prototipo
         return true;
     }
 

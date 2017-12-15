@@ -360,9 +360,9 @@ void analex(FILE *fp) {
         case 32:
             c = fgetc(fp);
             if(c == '=') {
-                estado = 33;
-            } else {
                 estado = 34;
+            } else {
+                estado = 33;
             }
             break;
         case 33:
