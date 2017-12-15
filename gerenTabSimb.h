@@ -41,7 +41,8 @@ void removeTabSimbolo();
 
 //Funcoes para checagem semantica
 
-bool checaPrototipo();
+void checaPrototipo();
+void checaVariavel();
 
 extern Simbolo TabelaSimbolos[QntSimbolos];
 extern CategoriaSimbolo catSimbolo;

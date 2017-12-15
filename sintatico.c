@@ -308,6 +308,7 @@ void tipos_p_opc() {
     } else if(tipo()) {
         tipSimbolo = token.valor.codPR;
         tokenTabSimb = token;
+        strcpy(tokenTabSimb.lexema, "lixo");
         addTabSimbolo();
         analex(fp);
         if(token.tipo == ID) {
@@ -371,9 +372,10 @@ void cmd() {
     } else if(token.tipo == PR && token.valor.codPR == PR_ENQUANTO) {
         analex(fp);
         if(token.tipo == SN && token.valor.codSN == SN_ABRI_PARENTESE) {
-            expr();
             analex(fp);
+            expr();
             if(token.tipo == SN && token.valor.codSN == SN_FECHA_PARENTESE) {
+                analex(fp);
                 cmd();
             } else {
                 error();
@@ -485,6 +487,7 @@ void cmd() {
             return;
         }
     } else if(token.tipo == ID) {
+        checaVariavel();
         if(tokenNext.tipo == SN && tokenNext.valor.codSN == SN_ATRIBUICAO) {
             atrib();
         } else if(tokenNext.tipo == SN && tokenNext.valor.codSN == SN_ABRI_PARENTESE) {
@@ -590,7 +593,7 @@ void expr_simp() {
 void termo() {
     fator();
     //analex(fp);
-    while(tokenNext.tipo == SN && (tokenNext.valor.codSN == SN_MULTIPLICACAO || tokenNext.valor.codSN == SN_DIVISAO || tokenNext.valor.codSN == SN_AND)) {
+    while(token.tipo == SN && (token.valor.codSN == SN_MULTIPLICACAO || token.valor.codSN == SN_DIVISAO || token.valor.codSN == SN_AND)) {
         analex(fp);
         fator();;
     }
@@ -602,6 +605,7 @@ void fator() {
         analex(fp);
         return;
     } else if(token.tipo == ID) {
+        checaVariavel();
         if(tokenNext.tipo == SN && tokenNext.valor.codSN == SN_ABRI_PARENTESE) {
             analex(fp);
             if(tokenNext.tipo == SN && tokenNext.valor.codSN == SN_FECHA_PARENTESE) {
@@ -632,6 +636,7 @@ void fator() {
             error();
         }
     } else if(token.tipo == SN && token.valor.codSN == SN_NEGACAO) {
+        analex(fp);
         fator();
     } else {
         error();

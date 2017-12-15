@@ -15,7 +15,7 @@ CategoriaSimbolo catSimbolo;
 EscopoSimbolo escSimbolo;
 TipoSimbolo tipSimbolo;
 int topo = -1, i;
-Token tokenTabSimb;
+Token tokenTabSimb, token;
 
 int qntParamProtot, qntParamFunc;
 
@@ -59,7 +59,7 @@ bool checaTabSimbolo() {
         return false;
     } else {
         for(i = topo; i >= 0 && TabelaSimbolos[i].categoria != FUNCAO ; i--) {
-            if((!strcmp(TabelaSimbolos[i].lexema, tokenTabSimb.lexema) && catSimbolo != PARAMETRO) && (TabelaSimbolos[i].zumbi == 0 && TabelaSimbolos[i].escopo == escSimbolo)) {
+            if(!strcmp(TabelaSimbolos[i].lexema, tokenTabSimb.lexema) && (TabelaSimbolos[i].zumbi == 0 && TabelaSimbolos[i].escopo == escSimbolo) && strcmp(tokenTabSimb.lexema, "lixo") != 0) {
                 return true;
             }
         }
@@ -67,7 +67,7 @@ bool checaTabSimbolo() {
     }
 }
 
-bool checaPrototipo() {
+void checaPrototipo() {
     int prototAux, funcAux;
 
     prototAux = funcAux = topo;
@@ -80,7 +80,7 @@ bool checaPrototipo() {
     }
 
     if(prototAux == -1 && TabelaSimbolos[prototAux].categoria != PROTOTIPO){     //Funcao sem prototipo
-        return true;
+        return;
     }
 
     for(i = prototAux + 1; TabelaSimbolos[i].categoria == PARAMETRO; i++) {     //Conta parametros do prototipo
@@ -90,13 +90,9 @@ bool checaPrototipo() {
         qntParamFunc++;
     }
 
-    if(qntParamFunc + qntParamProtot == 0) {
-        return true;
-    }
-
     if(qntParamFunc != qntParamProtot) {
         printf("Conflict to numbers for parametrs. line: %d\n", contlin);
-        return false;
+        exit(EXIT_FAILURE);
     }
 
     //Funcao com prototipo; CHECA OS TIPOS
@@ -104,18 +100,43 @@ bool checaPrototipo() {
         funcAux++;
         prototAux++;
 
+        if(qntParamFunc + qntParamProtot == 0) {
+            return;
+        }
+
         while(TabelaSimbolos[prototAux].categoria == PARAMETRO) {
             if(TabelaSimbolos[prototAux].tipo == TabelaSimbolos[funcAux].tipo) {
                 funcAux++;
                 prototAux++;
             } else {
                 printf("Conflict Tipe to parametrs. line: %d\n", contlin);
-                return false;
+                exit(EXIT_FAILURE);
             }
         }
-        return true;
+        return;
     } else {
         printf("Conflict Tipe to Func and Prototype. line: %d\n", contlin);
-        return false;
+        exit(EXIT_FAILURE);
+    }
+}
+
+void checaVariavel() {
+    int test, i;
+    test = 0;
+
+    for(i = topo; i >= 0 && TabelaSimbolos[i].categoria != FUNCAO; i--) {
+        if(!strcmp(TabelaSimbolos[i].lexema, token.lexema)){
+            test = 1;
+        }
+    }
+    for(i = topo; i >= 0; i--) {
+        if(!strcmp(TabelaSimbolos[i].lexema, token.lexema) && TabelaSimbolos[i].escopo == GLOBAL && TabelaSimbolos[i].categoria == VARIAVEL) {
+            test = 1;
+        }
+    }
+
+    if(test == 0) {
+       printf("Variavel nao declarada. line: %d\n", contlin);
+       exit(EXIT_FAILURE);
     }
 }
