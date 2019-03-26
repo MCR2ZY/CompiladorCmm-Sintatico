@@ -1,5 +1,5 @@
-# SintaticoTemp
-Repositório temporário para desenvolvimento compartilhado de um analisador sintático.
+# Compilador-Cmm
+Compilador para a linguagem Cmm, sugerida na matéria de fundamentos de compiladores na Universidade do Estado da Bahia(UnEB), pelo professor Antonio Atta.
 
-Pendencias:  
+Pendencias a verificar:  
 Adicionar campo para salvar o endereço de memória no caso de identificadores/variaveis e o label no caso de funções. 
